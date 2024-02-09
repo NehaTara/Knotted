@@ -25,4 +25,18 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-});
+
+    
+    Route::resource(
+        'user',
+        \App\Http\Controllers\UserController::class
+    );
+
+    Route::resource(
+        'booking',
+        \App\Http\Controllers\BookingController::class
+    );
+
+}); 
+
+ 
