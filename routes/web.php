@@ -33,8 +33,8 @@ Route::middleware([
     );
 
     Route::resource(
-        'booking',
-        \App\Http\Controllers\BookingController::class
+        'product-category',
+        \App\Http\Controllers\ProductCategoryController::class
     );
 
 }); 
