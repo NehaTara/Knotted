@@ -99,7 +99,7 @@
                                     {{ __('Users') }}
                             </x-dropdown-link>
 
-                            <x-dropdown-link href="{{ route('user.index') }}">
+                            <x-dropdown-link href="{{ route('booking.index') }}">
                                     {{ __('Bookings') }}
                             </x-dropdown-link>                           
 
