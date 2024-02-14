@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
 
@@ -14,7 +15,7 @@ class ProductCategoryController extends Controller
     public function index()
     {
         return view('admin.product_category.index', [
-            'product_categories' => ProductCategory::orderBy('id', 'DESC')->paginate(10)
+            'product_categories' => ProductCategory::paginate(10)
         ]);
     }
 
@@ -24,19 +25,27 @@ class ProductCategoryController extends Controller
     public function create()
     {
         return view('admin.product_category.form', [
-
+                'productcategory' => (new ProductCategory()),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductCategoryRequest $request)
-    {
-        (new ProductCategory())->create($request->all());
+    public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required',
+        'slug' => 'required|unique:product_categories',
+    ]);
 
-        return redirect()->route('product-category.index');
-    }
+    // Ensure the slug is unique by appending a timestamp
+    $validated['slug'] .= '-' . time();
+
+    ProductCategory::create($validated);
+
+    return redirect()->route('product-category.index')->with('success', 'Product Category successfully created!');
+}
 
     /**
      * Display the specified resource.
@@ -51,15 +60,26 @@ class ProductCategoryController extends Controller
      */
     public function edit(ProductCategory $productCategory)
     {
-        //
+        return view('admin.product_category.form', [
+            'productcategory' => $productCategory,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductCategoryRequest $request, ProductCategory $productCategory)
+    public function update(Request $request, ProductCategory $productCategory)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+            'slug' => 'required|unique:product_categories',
+        ]);
+
+        $validated['slug'] .= '-' . time();
+
+        $productCategory->update($validated);
+
+        return redirect()->route('product-category.index')->with('success', 'Product Category successfully Updated!');
     }
 
     /**
